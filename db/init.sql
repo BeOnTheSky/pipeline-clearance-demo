@@ -1,7 +1,7 @@
 BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS postgis;
-
+-- 建表时：规定 geom 字段保存三维折线，SRID 为 0。表示没有指定已知的空间参考系统
 CREATE TABLE pipeline (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(80) NOT NULL,

@@ -19,7 +19,7 @@ public class Result<T> {
     /** 列表、管线信息等业务数据，无数据时省略。 */
     private T data;
 
-    /** 返回查询或修改成功的数据。 */
+    /** 返回查询、新增或修改成功的数据。 */
     public static <T> Result<T> success(T data) {
         return create(200, "成功", data);
     }
@@ -29,17 +29,12 @@ public class Result<T> {
         return create(200, "成功", null);
     }
 
-    /** 返回新增管线的保存结果。 */
-    public static <T> Result<T> created(T data) {
-        return create(201, "创建成功", data);
-    }
-
     /** 返回失败状态及具体提示。 */
     public static Result<Void> error(int code, String message) {
         return create(code, message, null);
     }
 
-    /** 组装三种响应共用的字段。 */
+    /** 组装响应的通用字段。 */
     private static <T> Result<T> create(int code, String message, T data) {
         Result<T> result = new Result<>();
         result.setCode(code);

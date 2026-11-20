@@ -6,8 +6,8 @@ import com.example.pipeline.service.PipelineService;
 import com.example.pipeline.vo.ClearanceVO;
 import com.example.pipeline.vo.PipelineVO;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -42,15 +41,14 @@ public class PipelineController {
 
     /** 保存新管线，返回数据库分配的编号。 */
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public Result<PipelineVO> createPipeline(@RequestBody PipelineRequest request) {
-        return Result.created(pipelineService.createPipeline(request));
+        return Result.success(pipelineService.createPipeline(request));
     }
 
     /** 保存指定管线的名称、类型、半径和三维顶点。 */
-    @PutMapping("/{id}")
-    public Result<PipelineVO> updatePipeline(@PathVariable Long id, @RequestBody PipelineRequest request) {
-        return Result.success(pipelineService.updatePipeline(id, request));
+    @PutMapping
+    public Result<PipelineVO> updatePipeline(@RequestBody PipelineRequest request) {
+        return Result.success(pipelineService.updatePipeline(request));
     }
 
     /** 删除指定管线。 */

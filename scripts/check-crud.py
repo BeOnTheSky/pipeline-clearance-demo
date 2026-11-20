@@ -35,22 +35,27 @@ def main():
     """检查真实 PostGIS 写入、编号生成、净距和输入校验。"""
     original = request('GET', '/api/pipelines')
     created = []
-    sample = {'name': '__api_check_' + str(time.time_ns()), 'type': '供水',
+    sample = {'name': '  __api_check_' + str(time.time_ns()) + '  ', 'type': '供水',
               'radiusM': 0.1, 'points': [[-5, 0, -1.5], [5, 0, -1.5]]}
     try:
-        saved = request('POST', '/api/pipelines', sample, 201)
+        saved = request('POST', '/api/pipelines', sample)
         created.append(saved['id'])
         assert saved['points'] == sample['points']
+        assert saved['name'] == sample['name'].strip()
         assert saved['id'] not in {p['id'] for p in original}
+
+        # 保存接口直接返回实体数据，独立查询确认编号、名称和顶点已实际写入。
+        reloaded = next(p for p in request('GET', '/api/pipelines') if p['id'] == saved['id'])
+        assert reloaded == saved
         rows = request('GET', f"/api/pipelines/{saved['id']}/clearances")
         assert len(rows) == len(original)
         ab = next(row for row in rows if row['targetId'] == 2)
         assert math.isclose(ab['clearanceM'], 0.35, abs_tol=1e-10)
 
         # 插入中间点并改变半径和高度，重新查询数据库结果。
-        edited = {**sample, 'radiusM': 0.12, 'type': '排水',
+        edited = {**sample, 'id': saved['id'], 'radiusM': 0.12, 'type': '排水',
                   'points': [[-5, 0, -1.3], [0, 0, -1.3], [5, 0, -1.3]]}
-        updated = request('PUT', f"/api/pipelines/{saved['id']}", edited)
+        updated = request('PUT', '/api/pipelines', edited)
         assert updated['points'] == edited['points']
         assert updated['radiusM'] == 0.12 and updated['type'] == '排水'
         reloaded = next(p for p in request('GET', '/api/pipelines') if p['id'] == saved['id'])
@@ -71,14 +76,16 @@ def main():
                        {'points': [[0, 0, -1], [-0.0, 0, -1]]}]:
             error = request('POST', '/api/pipelines', {**sample, **change}, 400)
             assert error.get('message')
-        request('PUT', '/api/pipelines/99999999', sample, 404)
+        for invalid_id in [None, 0, -1]:
+            request('PUT', '/api/pipelines', {**sample, 'id': invalid_id}, 400)
+        request('PUT', '/api/pipelines', {**sample, 'id': 99999999}, 404)
         request('DELETE', '/api/pipelines/99999999', expected=404)
         assert len(request('GET', '/api/pipelines')) == len(original) + 1
 
-        # 并发新增编号不能重复，也不能覆盖原有管线。
+        # 新增始终使用自增编号，即使请求携带已有编号，也不会覆盖原有管线。
         with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
             futures = [pool.submit(request, 'POST', '/api/pipelines',
-                                   {**sample, 'name': sample['name'] + '_' + str(i)}, 201)
+                                   {**sample, 'id': saved['id'], 'name': sample['name'] + '_' + str(i)})
                        for i in range(4)]
             for future in futures:
                 created.append(future.result()['id'])

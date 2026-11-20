@@ -16,8 +16,8 @@ public interface PipelineService {
     /** 新增管线并返回保存后的数据。 */
     PipelineVO createPipeline(PipelineRequest request);
 
-    /** 更新管线并返回保存后的数据。 */
-    PipelineVO updatePipeline(Long id, PipelineRequest request);
+    /** 根据请求中的编号更新管线，并返回保存后的数据。 */
+    PipelineVO updatePipeline(PipelineRequest request);
 
     /** 删除指定管线。 */
     void deletePipeline(Long id);

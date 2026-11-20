@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pipeline.mapper.PipelineMapper">
+    <!-- 把 PostGIS 数据库中的几何对象 geom 转成 GeoJSON 文本，
+         坐标最多保留 15 位小数。后端再提取
+         coordinates，得到 double[][]，交给前端绘制管线。 -->
     <select id="selectAll" resultType="com.example.pipeline.entity.Pipeline">
         SELECT id,
                name,
@@ -10,17 +13,6 @@
         FROM pipeline
         ORDER BY id
     </select>
-
-    <select id="selectById" resultType="com.example.pipeline.entity.Pipeline">
-        SELECT id,
-               name,
-               type,
-               radius_m,
-               ST_AsGeoJSON(geom, 15) AS geometry_json
-        FROM pipeline
-        WHERE id = #{id}
-    </select>
-
     <select id="existsById" resultType="boolean">
         SELECT EXISTS (
             SELECT 1
@@ -43,19 +35,19 @@
         ORDER BY clearance_m, target.id
     </select>
 
-    <insert id="insertPipeline" useGeneratedKeys="true" keyProperty="pipeline.id" keyColumn="id">
+    <insert id="insertPipeline" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO pipeline (name, type, radius_m, geom)
-        VALUES (#{pipeline.name}, #{pipeline.type}, #{pipeline.radiusM},
+        VALUES (#{name}, #{type}, #{radiusM},
                 ST_GeomFromText(#{geometryWkt}, 0))
     </insert>
 
     <update id="updatePipeline">
         UPDATE pipeline
-        SET name = #{pipeline.name},
-            type = #{pipeline.type},
-            radius_m = #{pipeline.radiusM},
+        SET name = #{name},
+            type = #{type},
+            radius_m = #{radiusM},
             geom = ST_GeomFromText(#{geometryWkt}, 0)
-        WHERE id = #{pipeline.id}
+        WHERE id = #{id}
     </update>
 
     <delete id="deletePipeline">

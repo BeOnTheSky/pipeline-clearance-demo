@@ -8,6 +8,9 @@ import lombok.Data;
 @Data
 public class PipelineRequest {
 
+    /** 更新时提交的管线编号，新增时由数据库生成。 */
+    private Long id;
+
     /** 管线名称。 */
     private String name;
 

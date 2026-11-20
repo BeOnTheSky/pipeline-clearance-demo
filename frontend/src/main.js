@@ -185,6 +185,7 @@ function readPipeline(report = false) {
     return null;
   }
   return {
+    id: mode === 'edit' ? selectedId : undefined,
     name: document.querySelector('#pipeline-name').value.trim(),
     type: document.querySelector('#pipeline-type-input').value,
     radiusM: document.querySelector('#pipeline-radius-input').valueAsNumber,
@@ -288,13 +289,10 @@ async function savePipeline(event) {
   updateControls();
   showStatus('正在保存…');
   try {
-    const saved = await requestJson(
-      mode === 'new' ? '/api/pipelines' : `/api/pipelines/${selectedId}`,
-      {
-        method: mode === 'new' ? 'POST' : 'PUT',
-        body: JSON.stringify(pipeline),
-      },
-    );
+    const saved = await requestJson('/api/pipelines', {
+      method: mode === 'new' ? 'POST' : 'PUT',
+      body: JSON.stringify(pipeline),
+    });
     // 使用服务端返回值更新列表，保存完成后才可进行冲突分析。
     const index = pipelines.findIndex((item) => item.id === saved.id);
     if (index < 0) pipelines.push(saved);

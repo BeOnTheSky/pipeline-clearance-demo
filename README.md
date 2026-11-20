@@ -147,11 +147,11 @@ pipeline-clearance-demo/
 | --- | --- |
 | `GET /api/pipelines` | 获取管线、外半径和三维顶点 |
 | `POST /api/pipelines` | 保存新管线 |
-| `PUT /api/pipelines/{id}` | 保存管线修改 |
+| `PUT /api/pipelines` | 保存管线修改，编号放在请求体中 |
 | `DELETE /api/pipelines/{id}` | 删除管线 |
 | `GET /api/pipelines/{id}/clearances` | 获取三维净距及最短连线 |
 
-接口统一返回 `code`、`message` 和 `data`。新建和编辑的请求体相同：
+接口统一返回 `code`、`message` 和 `data`。新增时提交以下内容；更新时增加 `id` 字段，填写要修改的管线编号：
 
 ```json
 {
