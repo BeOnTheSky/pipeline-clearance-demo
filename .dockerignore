@@ -1,0 +1,10 @@
+**/node_modules
+**/dist
+**/target
+**/*.log
+.git
+docs
+scripts
+README.md
+**/.env.local
+.env

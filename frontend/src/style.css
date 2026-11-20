@@ -1,0 +1,690 @@
+:root {
+  font-family: Inter, 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  color: #dce6ee;
+  background: #101922;
+  font-synthesis: none;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+select,
+input {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #66cbbf;
+  outline-offset: 3px;
+}
+[hidden] {
+  display: none !important;
+}
+
+.app-header {
+  height: 88px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 30px;
+  background: #15212c;
+  border-bottom: 1px solid #2a3945;
+}
+.brand-mark {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #5bc4b6;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  color: #73d5c7;
+}
+h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.sample-badge {
+  margin-left: auto;
+  font-size: 14px;
+  color: #98acbd;
+}
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 500px;
+  height: calc(100dvh - 88px);
+  min-height: 600px;
+}
+.viewport {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+}
+#scene {
+  position: absolute;
+  inset: 0;
+}
+#scene canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.view-heading {
+  position: absolute;
+  top: 18px;
+  left: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  pointer-events: none;
+  padding: 10px 12px;
+  border: 1px solid #3e566954;
+  border-radius: 5px;
+  background: #142330d9;
+}
+.view-heading > span:last-child {
+  margin-left: 5px;
+  color: #aec0ce;
+  font-size: 14px;
+}
+.live-dot {
+  width: 6px;
+  height: 6px;
+  background: #66cbbf;
+  border-radius: 50%;
+}
+.view-reset {
+  padding: 9px 12px;
+  border: 1px solid #364754;
+  border-radius: 5px;
+  color: #bbccd9;
+  background: #182632df;
+  font-size: 14px;
+}
+.view-tools {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  display: flex;
+  gap: 8px;
+}
+.view-reset:hover {
+  background: #273b49;
+}
+.scene-message {
+  position: absolute;
+  top: 44%;
+  left: 10%;
+  width: 80%;
+  padding: 20px;
+  border: 1px solid #354959;
+  background: #172632ed;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 14px;
+}
+.view-legend {
+  position: absolute;
+  bottom: 76px;
+  left: 28px;
+  width: fit-content;
+  max-width: calc(100% - 48px);
+  display: flex;
+  gap: 13px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: #a3b6c5;
+  pointer-events: none;
+  padding: 12px 16px;
+  border: 1px solid #3e566954;
+  border-radius: 8px;
+  background: #142330d9;
+  backdrop-filter: blur(12px);
+}
+.view-legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.view-legend i {
+  width: 7px;
+  height: 7px;
+  background: var(--color);
+  border-radius: 50%;
+}
+.legend-separator {
+  border-left: 1px solid #3c4d5b;
+}
+.view-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 28px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: #aec0ce;
+  border-top: 1px solid #263541;
+  font-size: 14px;
+  background: #101922ba;
+}
+.analysis-panel {
+  background: #182530;
+  border-left: 1px solid #2a3945;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #425868 #182530;
+}
+.selection-section {
+  padding: 16px 24px 12px;
+  flex: 0 0 var(--editor-height, 52%);
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+label {
+  font-size: 15px;
+  display: block;
+  color: #b9c9d5;
+  margin-bottom: 6px;
+}
+select,
+input {
+  width: 100%;
+  border: 1px solid #3b4f5e;
+  border-radius: 5px;
+  background: #101e29;
+  color: #e2edf4;
+  height: 38px;
+  padding: 0 12px;
+  font-size: 15px;
+}
+input {
+  font-variant-numeric: tabular-nums;
+}
+.pipeline-meta {
+  display: flex;
+  justify-content: space-between;
+  color: #a7bdcc;
+  font-size: 14px;
+  margin: 8px 0 10px;
+}
+.primary-button {
+  margin-top: 18px;
+  width: 100%;
+  padding: 11px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #69c9ba;
+  color: #102b2a;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.primary-button:hover:not(:disabled) {
+  background: #88ddcf;
+}
+.primary-button span {
+  font-size: 18px;
+  line-height: 1;
+}
+.results-section {
+  min-height: 150px;
+  padding: 16px 24px 8px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.results-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+.results-heading #result-summary {
+  font-size: 14px;
+  color: #a0b3c1;
+}
+.result-column-heading {
+  display: flex;
+  justify-content: space-between;
+  color: #a7bdcc;
+  font-size: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #324350;
+}
+.empty-message {
+  color: #90a6b6;
+  font-size: 14px;
+  line-height: 1.9;
+  padding: 22px 0;
+}
+.result-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 8px;
+  border: 0;
+  border-bottom: 1px solid #2b3b48;
+  border-left: 2px solid transparent;
+  color: #c8d7e2;
+  background: transparent;
+  text-align: left;
+}
+.result-row:hover {
+  background: #213441;
+}
+.result-row.active {
+  background: #273d49;
+  border-left-color: #dcecf4;
+}
+.result-row strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+}
+.result-row small {
+  display: block;
+  font-size: 14px;
+  margin-top: 6px;
+  color: #a7bdcc;
+}
+.clearance-value {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.clearance-value strong {
+  font-size: 15px;
+}
+.result-row.risk .clearance-value {
+  color: #ff8b81;
+}
+.result-row.risk .clearance-value small {
+  color: #c7817c;
+}
+
+/* 控制区保持可见，结果列表独立滚动。 */
+#results {
+  overflow-y: auto;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #3c5667 transparent;
+}
+.view-tools .view-reset {
+  width: auto;
+  height: 38px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* 管线属性、顶点表和结果保持同一字号层级。 */
+h2,
+h3 {
+  margin: 0;
+  color: #e2edf4;
+  font-weight: 600;
+}
+h2 {
+  font-size: 17px;
+}
+h3 {
+  font-size: 15px;
+}
+.panel-heading,
+.vertices-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.inline-actions {
+  display: flex;
+  gap: 18px;
+}
+.text-button {
+  background: transparent;
+  padding: 0;
+  border: 0;
+  color: #8adacc;
+  font-size: 14px;
+}
+.text-button:hover {
+  color: #c7f3e9;
+}
+.text-button.danger {
+  color: #ed9e95;
+}
+.secondary-button {
+  border: 1px solid #3b5363;
+  border-radius: 5px;
+  background: #223744;
+  color: #d8e9ee;
+  padding: 8px 14px;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.secondary-button:hover {
+  background: #2d4655;
+}
+.pipeline-picker {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+.pipeline-meta {
+  margin: 12px 0 18px;
+}
+.edit-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 18px 0;
+}
+.edit-fields label {
+  margin: 0;
+  font-size: 14px;
+}
+.edit-fields input,
+.edit-fields select {
+  margin-top: 7px;
+}
+.full-field {
+  grid-column: 1 / -1;
+}
+.vertices-heading {
+  margin: 16px 0 10px;
+}
+.vertex-insert-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.vertices-heading h3 span {
+  margin-left: 6px;
+  color: #9bb1c0;
+  font-size: 14px;
+  font-weight: 400;
+}
+.vertex-scroll {
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #344c5d;
+  border-radius: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #3c5667 transparent;
+}
+.vertex-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.vertex-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #20313e;
+  color: #abc2d1;
+  height: 32px;
+  font-weight: 400;
+}
+.vertex-table th:first-child,
+.vertex-table td:first-child {
+  width: 34px;
+  text-align: center;
+}
+.vertex-table th.point-actions {
+  width: 70px;
+}
+.vertex-table td {
+  padding: 3px;
+  text-align: center;
+  border-top: 1px solid #2c4353;
+  color: #a9c2d3;
+}
+.vertex-table input {
+  text-align: center;
+  height: 32px;
+  padding: 0 6px;
+  font-size: 15px;
+  min-width: 0;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+.vertex-table input::-webkit-inner-spin-button,
+.vertex-table input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.view-mode .point-actions {
+  display: none;
+}
+.view-mode .vertex-table input {
+  background: transparent;
+  border-color: transparent;
+}
+.vertex-table .selected-vertex {
+  background: #28404e;
+}
+.vertex-table .selected-vertex td:first-child {
+  color: #f6c96d;
+}
+.point-actions button {
+  width: 29px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #b2d9d4;
+  font-size: 19px;
+}
+.point-actions button:hover {
+  background: #344e5e;
+  color: #fff;
+}
+.save-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+.save-actions .primary-button {
+  margin: 0;
+  flex: 1;
+  justify-content: center;
+}
+.editor-status {
+  color: #a6dfd2;
+  font-size: 14px;
+  margin: 12px 0 0;
+  line-height: 1.5;
+}
+.editor-status.error {
+  color: #ffaba3;
+}
+.analysis-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 90px 118px;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+.analysis-controls label {
+  margin: 0;
+  font-size: 14px;
+}
+.analysis-controls .primary-button {
+  margin: 0;
+  justify-content: center;
+  padding: 10px;
+}
+.results-heading {
+  margin-bottom: 14px;
+}
+.editing .selection-section {
+  display: block;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+.editing .vertex-scroll {
+  max-height: 260px;
+}
+
+/* 顶点编号与坐标表逐行对应，保持屏幕上的字号不随缩放变化。 */
+.vertex-label-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.vertex-number {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 5px;
+  transform: translate(-50%, calc(-100% - 12px));
+  border: 1px solid #a6eee1;
+  border-radius: 7px;
+  background: #17373eed;
+  color: #e0fff7;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  box-shadow: 0 3px 8px #06101966;
+}
+.vertex-number::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 1px;
+  height: var(--stem-length, 11px);
+  transform: rotate(var(--stem-angle, 0rad));
+  transform-origin: top center;
+  background: #a6eee1;
+}
+.vertex-number.active {
+  border-color: #f6c96d;
+  background: #584725ed;
+  color: #fff1c5;
+}
+.vertex-number.active::after {
+  background: #f6c96d;
+}
+
+/* 拖动分隔线调整上下区域，分析按钮固定在信息区底部。 */
+.panel-resizer {
+  height: 10px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  cursor: row-resize;
+  touch-action: none;
+  background: #12212d;
+  border-block: 1px solid #324957;
+}
+.panel-resizer::after {
+  content: '';
+  width: 46px;
+  height: 3px;
+  border-radius: 2px;
+  background: #668b9d;
+}
+.panel-resizer:hover::after,
+.panel-resizer.dragging::after {
+  background: #8adacc;
+}
+.panel-resizer:focus-visible {
+  outline: 2px solid #8adacc;
+  outline-offset: -2px;
+}
+.view-mode .selection-section > :not(#pipeline-form) {
+  flex-shrink: 0;
+}
+.view-mode #pipeline-form {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.view-mode .vertex-scroll {
+  max-height: none;
+  overflow: visible;
+}
+.view-mode .analysis-controls {
+  margin-top: 12px;
+}
+.editing #pipeline-form {
+  overflow: visible;
+}
+.panel-dragging {
+  cursor: row-resize;
+  user-select: none;
+}
+
+.view-mode .pipeline-meta {
+  margin: 8px 0;
+}
+.view-mode .vertices-heading {
+  margin: 4px 0 8px;
+}
+
+/* 轴线位于基座角落，文字随三维位置投影到画布。 */
+.reference-axis-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.reference-axis-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 4px;
+  padding: 2px 5px;
+  background: #111e2bc9;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.reference-axis-label.axis-tick {
+  font-size: 14px;
+  font-weight: 400;
+}
+.reference-axis-label.axis-zero {
+  font-weight: 700;
+}
+.reference-axis-label.axis-base-point {
+  font-size: 14px;
+  border: 1px solid #75949f;
+  white-space: nowrap;
+}

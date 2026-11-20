@@ -1,0 +1,11 @@
+node_modules/
+dist/
+target/
+*.log
+.idea/
+.vscode/
+.DS_Store
+__pycache__/
+*.zip
+**/.env.local
+.env

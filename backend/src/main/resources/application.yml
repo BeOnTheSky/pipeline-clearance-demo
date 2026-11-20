@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: pipeline-clearance-demo
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/pipeline_demo}
+    username: ${DB_USER:pipeline}
+    password: ${DB_PASSWORD:pipeline_demo}
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true

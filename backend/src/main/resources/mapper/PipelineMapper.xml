@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pipeline.mapper.PipelineMapper">
+    <select id="selectAll" resultType="com.example.pipeline.entity.Pipeline">
+        SELECT id,
+               name,
+               type,
+               radius_m,
+               ST_AsGeoJSON(geom, 15) AS geometry_json
+        FROM pipeline
+        ORDER BY id
+    </select>
+
+    <select id="selectById" resultType="com.example.pipeline.entity.Pipeline">
+        SELECT id,
+               name,
+               type,
+               radius_m,
+               ST_AsGeoJSON(geom, 15) AS geometry_json
+        FROM pipeline
+        WHERE id = #{id}
+    </select>
+
+    <select id="existsById" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1
+            FROM pipeline
+            WHERE id = #{id}
+        )
+    </select>
+
+    <!-- 三维中心线距离扣除两管外半径，保留负净距；连线起点在 source，终点在 target。 -->
+    <select id="selectClearances" resultType="com.example.pipeline.entity.ClearanceRow">
+        SELECT target.id AS target_id,
+               target.name AS target_name,
+               ST_3DDistance(source.geom, target.geom) AS center_distance_m,
+               ST_3DDistance(source.geom, target.geom)
+                   - source.radius_m - target.radius_m AS clearance_m,
+               ST_AsGeoJSON(ST_3DShortestLine(source.geom, target.geom), 15) AS shortest_line_json
+        FROM pipeline source
+        JOIN pipeline target ON target.id != source.id
+        WHERE source.id = #{id}
+        ORDER BY clearance_m, target.id
+    </select>
+
+    <insert id="insertPipeline" useGeneratedKeys="true" keyProperty="pipeline.id" keyColumn="id">
+        INSERT INTO pipeline (name, type, radius_m, geom)
+        VALUES (#{pipeline.name}, #{pipeline.type}, #{pipeline.radiusM},
+                ST_GeomFromText(#{geometryWkt}, 0))
+    </insert>
+
+    <update id="updatePipeline">
+        UPDATE pipeline
+        SET name = #{pipeline.name},
+            type = #{pipeline.type},
+            radius_m = #{pipeline.radiusM},
+            geom = ST_GeomFromText(#{geometryWkt}, 0)
+        WHERE id = #{pipeline.id}
+    </update>
+
+    <delete id="deletePipeline">
+        DELETE FROM pipeline
+        WHERE id = #{id}
+    </delete>
+</mapper>
