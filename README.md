@@ -103,7 +103,34 @@ XYZ 坐标和外半径均以米为单位。Z 轴向上，地表为 `Z=0`，`Z=-1
 
 ```text
 pipeline-clearance-demo/
-├── backend/              Spring Boot、MyBatis 与净距计算接口
+├── backend/
+│   ├── pom.xml                                      Maven 依赖与构建配置
+│   └── src/main/
+│       ├── java/com/example/pipeline/
+│       │   ├── PipelineApplication.java             Spring Boot 启动入口
+│       │   ├── controller/
+│       │   │   └── PipelineController.java          管线增删改查与净距分析接口
+│       │   ├── service/
+│       │   │   ├── PipelineService.java             业务接口
+│       │   │   └── impl/
+│       │   │       └── PipelineServiceImpl.java     输入校验、管线保存与分析结果组装
+│       │   ├── mapper/
+│       │   │   └── PipelineMapper.java              MyBatis 数据访问接口
+│       │   ├── entity/
+│       │   │   ├── Pipeline.java                    数据库管线数据
+│       │   │   └── ClearanceRow.java                净距查询结果
+│       │   ├── dto/
+│       │   │   └── PipelineRequest.java             新建、编辑管线的请求参数
+│       │   ├── vo/
+│       │   │   ├── PipelineVO.java                  返回前端的管线与顶点数据
+│       │   │   └── ClearanceVO.java                 返回前端的净距与最短连线
+│       │   └── common/
+│       │       ├── Result.java                      统一响应格式
+│       │       └── GlobalExceptionHandler.java      统一异常处理
+│       └── resources/
+│           ├── application.yml                      数据库与 MyBatis 配置
+│           └── mapper/
+│               └── PipelineMapper.xml              管线 CRUD 与 PostGIS 三维净距 SQL
 ├── frontend/             Three.js 场景、管线编辑与结果面板
 ├── db/
 │   └── init.sql          建表、14 条初始管线、自增编号
